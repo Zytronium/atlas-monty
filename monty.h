@@ -40,7 +40,7 @@ typedef struct instruction_s
 
 /* ↓ FUNCTIONS ↓ */
 int isNumber(char *number);
-void push(char *n);
+void push(char *n, int lineNum);
 /* ------------------- */
 
 #endif /* MONTY_H */

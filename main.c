@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 		++i;
 	}
 	putchar('\n');
-	if (argc >= 1)
+	if (argc >= 2)
 		printf("first arg given as number: %d", atoi(argv[1]));
 	return (EXIT_SUCCESS);
 }

@@ -6,22 +6,16 @@
  *
  * @n: integer or element to push.
  */
-void push(char *n)
+void push(char *n, int lineNum)
 {
 	int number;
 
 	if (isNumber(n)) /* check if input is a valid number */
 		number = atoi(n); /* set value for number */
 	else
-	{
-		/*
-		 * TODO: if n is not a number;
-		 *  print the error message, "L<line_number>: usage: push integer," followed
-		 *  by a new line, and exit with the status EXIT_FAILURE
-		 *
-		 */
-	}
+		fprintf(stderr, "L%d: usage: push integer\n", lineNum);
 
+	/* TODO: push the element to the stack, however that works... */
 }
 
 /**
