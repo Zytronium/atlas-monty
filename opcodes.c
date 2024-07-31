@@ -5,6 +5,7 @@
  * push - pushes an element to the stack
  *
  * @n: integer or element to push.
+ * @lineNum: line number of current opcode
  */
 void push(char *n, int lineNum)
 {
@@ -12,15 +13,46 @@ void push(char *n, int lineNum)
 
 	if (isNumber(n)) /* check if input is a valid number */
 		number = atoi(n); /* set value for number */
-	else
+	else /* print error msg */
 		fprintf(stderr, "L%d: usage: push integer\n", lineNum);
 
 	/* TODO: push the element to the stack, however that works... */
 }
 
 /**
+ * pass - prints all values on the stack starting from the top.
+ *
+ * @lineNum: line number of current opcode
+ */
+void pall(char *n, int lineNum)
+{
+	stack_t *i = findTail();
+
+	while (i != NULL)
+	{
+		printf("%d\n", i->n);
+		i = i->prev;
+	}
+}
+
+/**
+ *
+ * Return: last element in the stack
+ */
+stack_t *findTail(void)
+{
+	stack_t *tail = &stack;
+
+	while (tail->next != NULL)
+	{
+		tail = tail->next;
+	}
+	return (tail);
+}
+
+/**
  * isNumber - check for non-number characters in the string.
- * If any of the supplied numbers have non-number characters in them,
+ * If the given string has any non-number characters in it,
  * return 0.
  *
  * @number: character array to be checked if it's all numbers
