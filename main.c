@@ -13,9 +13,9 @@ int main(int argc, char *argv[])
 	int i = 0;
 
 	printf("Command used: ");
-	while (i <= argc)
+	while (i < argc)
 	{
-		printf("%s ");
+		printf("%s ", argv[i]);
 		++i;
 	}
 	putchar('\n');

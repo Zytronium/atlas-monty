@@ -1,3 +1,4 @@
+#include <string.h>
 #include "monty.h"
 
 /**
@@ -7,17 +8,40 @@
  */
 void push(char *n)
 {
-	int number = atoi(n);
+	int number;
 
-	/*
-	 * TODO: error checking;
-	 *  paste in isNumber() function and use that;
-	 *  or
-	 *  check if atoi returns 0 and make a function to detect if input is all 0s
-	 *  .
-	 *  on error:
-	 *  print the error message L<line_number>: usage: push integer, followed by
-	 *  a new line, and exit with the status EXIT_FAILURE
-	 *
-	 */
+	if (isNumber(n)) /* check if input is a valid number */
+		number = atoi(n); /* set value for number */
+	else
+	{
+		/*
+		 * TODO: if n is not a number;
+		 *  print the error message, "L<line_number>: usage: push integer," followed
+		 *  by a new line, and exit with the status EXIT_FAILURE
+		 *
+		 */
+	}
+
+}
+
+/**
+ * isNumber - check for non-number characters in the string.
+ * If any of the supplied numbers have non-number characters in them,
+ * return 0.
+ *
+ * @number: character array to be checked if it's all numbers
+ *
+ * Return: 1 if it's all numbers; 0 if not.
+ */
+int isNumber(char *number)
+{
+	unsigned int i;
+
+	for (i = 0; i < strlen(number); i++)
+	{
+		if (number[i] > '9' || number[i] < '0')
+			return (0);
+	}
+
+	return (1);
 }
