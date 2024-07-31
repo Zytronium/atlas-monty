@@ -39,6 +39,7 @@ typedef struct instruction_s
 /* ------------------- */
 
 /* ↓ FUNCTIONS ↓ */
+void push(char *n);
 /* ------------------- */
 
 #endif /* MONTY_H */

@@ -12,3 +12,4 @@ exitcode=$?   #save exit code
 echo  #blank line, to separate the running program from everything else
 echo "Process finished with exit code $exitcode."   #print exit code
 rm testRun  #delete test file
+
