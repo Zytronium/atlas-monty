@@ -10,6 +10,10 @@
  */
 int main(int argc, char *argv[])
 {
+	stack_t stack = {0, NULL, NULL};
+
+	(void) argv;
+	(void) stack;
 	if (argc != 2) /* no file name given */
 	{
 		fprintf(stderr, "USAGE: monty file\n");

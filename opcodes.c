@@ -7,7 +7,7 @@
  * @n: integer or element to push.
  * @lineNum: line number of current opcode
  */
-void push(char *n, int lineNum)
+void push(char *n, int lineNum, stack_t *stack)
 {
 	int number;
 	stack_t *newElmnt;
@@ -26,9 +26,9 @@ void push(char *n, int lineNum)
 
 	/* init newElmnt */
 	newElmnt->n = number;
-	newElmnt->prev = getTopElement();
+	newElmnt->prev = getTopElement(stack);
 	newElmnt->next = NULL;
-	getTopElement()->next = newElmnt;
+	getTopElement(stack)->next = newElmnt;
 }
 
 /**
@@ -36,9 +36,11 @@ void push(char *n, int lineNum)
  *
  * @lineNum: line number of current opcode
  */
-void pall(char *n, int lineNum)
+void pall(int lineNum, stack_t *stack)
 {
-	stack_t *i = getTopElement();
+	stack_t *i = getTopElement(stack);
+
+	(void) lineNum;
 
 	while (i != NULL)
 	{
@@ -51,9 +53,9 @@ void pall(char *n, int lineNum)
  * getTopElement - gets the element at the top of the stack
  * Return: last element in the stack
  */
-stack_t *getTopElement(void)
+stack_t *getTopElement(stack_t *stack)
 {
-	stack_t *tail = &stack;
+	stack_t *tail = stack;
 
 	while (tail->next != NULL)
 	{

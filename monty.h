@@ -36,14 +36,13 @@ typedef struct instruction_s
 	char *opcode;
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
-
-stack_t stack = (stack_t) {.n = 0, .prev = NULL, .next = NULL}
 /* ------------------- */
 
 /* ↓ FUNCTIONS ↓ */
 int isNumber(char *number);
-stack_t *getTopElement(void);
-void push(char *n, int lineNum);
+stack_t *getTopElement(stack_t *stack);
+void push(char *n, int lineNum, stack_t *stack);
+void pall(int lineNum, stack_t *stack);
 /* ------------------- */
 
 #endif /* MONTY_H */
