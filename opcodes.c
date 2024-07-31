@@ -10,13 +10,22 @@
 void push(char *n, int lineNum)
 {
 	int number;
+	stack_t *newElmnt;
 
 	if (isNumber(n)) /* check if input is a valid number */
 		number = atoi(n); /* set value for number */
 	else /* print error msg */
 		fprintf(stderr, "L%d: usage: push integer\n", lineNum);
 
-	/* TODO: push the element to the stack, however that works... */
+	newElmnt = malloc(sizeof(stack_t)); /* malloc new element */
+	if (newElmnt == NULL) /* malloc fail check */
+		exit(EXIT_FAILURE);
+
+	/* init newElmnt */
+	newElmnt->n = number;
+	newElmnt->prev = getTopElement();
+	newElmnt->next = NULL;
+	getTopElement()->next = newElmnt;
 }
 
 /**
