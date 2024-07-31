@@ -26,7 +26,7 @@ void push(char *n, int lineNum)
  */
 void pall(char *n, int lineNum)
 {
-	stack_t *i = findTail();
+	stack_t *i = getTopElement();
 
 	while (i != NULL)
 	{
@@ -36,10 +36,10 @@ void pall(char *n, int lineNum)
 }
 
 /**
- *
+ * getTopElement - gets the element at the top of the stack
  * Return: last element in the stack
  */
-stack_t *findTail(void)
+stack_t *getTopElement(void)
 {
 	stack_t *tail = &stack;
 

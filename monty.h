@@ -42,7 +42,7 @@ stack_t stack = (stack_t) {.n = 0, .prev = NULL, .next = NULL}
 
 /* ↓ FUNCTIONS ↓ */
 int isNumber(char *number);
-stack_t *findTail(void);
+stack_t *getTopElement(void);
 void push(char *n, int lineNum);
 /* ------------------- */
 
