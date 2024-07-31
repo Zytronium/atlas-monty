@@ -19,7 +19,10 @@ void push(char *n, int lineNum)
 
 	newElmnt = malloc(sizeof(stack_t)); /* malloc new element */
 	if (newElmnt == NULL) /* malloc fail check */
+	{
+		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
+	}
 
 	/* init newElmnt */
 	newElmnt->n = number;

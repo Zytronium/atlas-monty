@@ -10,16 +10,17 @@
  */
 int main(int argc, char *argv[])
 {
-	int i = 0;
-
-	printf("Command used: ");
-	while (i < argc)
+	if (argc != 2) /* no file name given */
 	{
-		printf("%s ", argv[i]);
-		++i;
+		fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);
 	}
-	putchar('\n');
-	if (argc >= 2)
-		printf("first arg given as number: %d", atoi(argv[1]));
+	/* TODO: read file and execute its code */
 	return (EXIT_SUCCESS);
 }
+
+/*
+ * note:
+ * argv[0]: program name
+ * argc[1]: file to process
+ */
