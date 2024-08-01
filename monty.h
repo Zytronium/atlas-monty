@@ -2,13 +2,26 @@
 #define MONTY_H
 
 /* ↓ LIBRARIES ↓ */
+#include <fcntl.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-#include <fcntl.h>
 /* ------------------- */
 
 /* ↓ STRUCTS AND MISC ↓ */
+/**
+ * opcodeIs - macro for checking if instruction.opcode is the given string.
+ * note: only works when the current scope has a string called opcode is equal
+ * to instructions[lineNum][0], assuming instructions is a char *** and
+ * lineNum is an int.
+ */
+#ifndef opcodeIs
+#define opcodeIs(opc) !strcmp(opcode, opc)
+
+#endif /* opcodeIs */
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -44,7 +57,8 @@ typedef struct instruction_s
 int isNumber(char *number);
 stack_t *getTopElement(stack_t *stack);
 char *get_file_contents(const char *filename);
-int execute_instructions(char *instructions, stack_t *stack);
+void parse_instructions(char *instructions, char ***dest);
+int execute_instructions(char ***instructions, stack_t *stack);
 void push(char *n, int lineNum, stack_t *stack);
 void pall(int lineNum, stack_t *stack);
 /* ------------------- */

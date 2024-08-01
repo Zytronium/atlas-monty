@@ -1,4 +1,3 @@
-#include <limits.h>
 #include "monty.h"
 
 /**
@@ -12,20 +11,49 @@
 int main(int argc, char *argv[])
 {
 	stack_t *stack = NULL;
-	char *instructions;
+	char *instructions, ***parsedInstructions;
 
-	(void) argv;
-	(void) stack;
 	if (argc != 2) /* no file name given */
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
+
+//	opcodes[0] = (instruction_t) {.opcode = "push", .f = push(0, 0, &stack)};
+
 	/* TODO: read file and execute its code */
 	instructions = get_file_contents(argv[1]); /* read file and get contents */
-	/* parse instructions and create a linked list of instructions */
-	execute_instructions(instructions, stack); /* execute instructions */
+
+	parse_instructions(instructions, parsedInstructions);
+	execute_instructions(parsedInstructions, stack); /* execute instructions */
 	return (EXIT_SUCCESS);
+}
+
+void parse_instructions(char *instructions, char ***dest)
+{
+	int parsedLine= 0, parsedWord = 0, parsedLetter = 0;
+	while (*instructions)
+	{
+		if (*instructions != '\n' && *instructions != ' ')
+		{
+			dest[parsedLine][parsedWord][parsedLetter] = *instructions;
+			parsedLetter++;
+		}
+		else if (*instructions == ' ')
+		{
+			/* TODO: probably need to add a null byte */
+			parsedWord++;
+			parsedLetter = 0;
+		}
+		else
+		{
+			/* TODO: may need to add a null byte */
+			parsedLine++;
+			parsedLetter = 0;
+			parsedWord = 0;
+		}
+		instructions++;
+	}
 }
 /*
  * note:
@@ -41,9 +69,28 @@ int main(int argc, char *argv[])
  *
  * Return: 1 on success, -1 on failure
  */
-int execute_instructions(char *instructions, stack_t *stack)
+int execute_instructions(char ***instructions, stack_t *stack)
 {
+	int lineNum = 0;
+	char *opcode;
 
+	while (instructions[lineNum])
+	{
+		opcode = instructions[lineNum][0];
+
+		if (opcodeIs("push"))
+		{
+			push(instructions[lineNum][1], lineNum, stack);
+		}
+		else if (opcodeIs("pall"))
+			pall(lineNum, stack);
+		else if (!opcodeIs("nop"))
+		{
+			fprintf(stderr, "L%d: unknown instruction %s\n", lineNum, opcode);
+			exit(EXIT_FAILURE);
+		}
+		lineNum++;
+	}
 	return (1);
 }
 
@@ -58,7 +105,7 @@ char *get_file_contents(const char *filename) // TODO
 {
 	int fileDesc;
 	ssize_t charsRead;
-	char *instructions;
+	char instructions[INT_MAX];
 
 	/*instructions = malloc(sizeof(char) * letters + 1);*/
 
@@ -87,5 +134,14 @@ char *get_file_contents(const char *filename) // TODO
 
 	close(fileDesc);
 
-	return (instructions);
+	return (&instructions[0]);
+}
+
+void execute_instr(instruction_t instruction, stack_t *stack)
+{
+	/*if (opcodeIs("push"))
+		instruction.f(&stack, 0);
+	else if (opcodeIs("pall"))
+		instruction.f(&stack, 0);*/
+
 }
