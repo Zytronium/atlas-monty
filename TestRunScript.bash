@@ -7,7 +7,7 @@ then
 fi
 chmod +x ./testRun  #make file executable
 echo  #blank line, to separate the running program from everything else
-./testRun 14  #runs the program
+./testRun /home/SmartFridge/CLionProjects/atlas-monty/14  #runs the program
 exitcode=$?   #save exit code
 echo  #blank line, to separate the running program from everything else
 echo "Process finished with exit code $exitcode."   #print exit code

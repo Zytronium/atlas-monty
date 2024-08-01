@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
+		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/14";*/
 	}
 
 	parsedInstructions = malloc(INT_MAX);
@@ -43,7 +44,7 @@ void parse_instructions(char *instructions, char ***dest)
 	{
 		if (*instructions != '\n' && *instructions != ' ')
 		{
-			dest[parsedLine][parsedWord][parsedLetter] = *instructions;
+			dest[parsedLine][parsedWord][parsedLetter] = *instructions; /* segfaults here because dest is somehow NULL */
 			parsedLetter++;
 		}
 		else if (*instructions == ' ')
