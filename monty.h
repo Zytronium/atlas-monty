@@ -4,6 +4,8 @@
 /* ↓ LIBRARIES ↓ */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 /* ------------------- */
 
 /* ↓ STRUCTS AND MISC ↓ */
@@ -41,6 +43,8 @@ typedef struct instruction_s
 /* ↓ FUNCTIONS ↓ */
 int isNumber(char *number);
 stack_t *getTopElement(stack_t *stack);
+char *get_file_contents(const char *filename);
+int execute_instructions(char *instructions, stack_t *stack);
 void push(char *n, int lineNum, stack_t *stack);
 void pall(int lineNum, stack_t *stack);
 /* ------------------- */
