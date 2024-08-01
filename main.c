@@ -19,13 +19,20 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-//	opcodes[0] = (instruction_t) {.opcode = "push", .f = push(0, 0, &stack)};
+	parsedInstructions = malloc(INT_MAX);
+	if (parsedInstructions == NULL)
+	{
+		fprintf(stderr, "Error: malloc failed");
+		exit(EXIT_FAILURE);
+	}
 
 	/* TODO: read file and execute its code */
 	instructions = get_file_contents(argv[1]); /* read file and get contents */
 
 	parse_instructions(instructions, parsedInstructions);
 	execute_instructions(parsedInstructions, stack); /* execute instructions */
+	free(parsedInstructions);
+	free(instructions);
 	return (EXIT_SUCCESS);
 }
 
@@ -101,7 +108,7 @@ int execute_instructions(char ***instructions, stack_t *stack)
  *
  * Return: the contents of the file, or NULL on failure.
  */
-char *get_file_contents(const char *filename) // TODO
+char *get_file_contents(const char *filename)
 {
 	int fileDesc;
 	ssize_t charsRead;
@@ -115,15 +122,15 @@ char *get_file_contents(const char *filename) // TODO
 		exit(EXIT_FAILURE);
 	}
 
-	if (filename == NULL/* || instructions == NULL*/)
-		return (0);
+	if (filename == NULL)
+		return (NULL);
 
 	fileDesc = open(filename, O_RDONLY);
 
 	if (fileDesc == -1)
 	{
 		close(fileDesc);
-		return (0);
+		return (NULL);
 	}
 
 	charsRead = read(fileDesc, instructions, INT_MAX - 1);
@@ -136,18 +143,7 @@ char *get_file_contents(const char *filename) // TODO
 
 	instructions[charsRead + 1] = '\0';
 
-	/*printedChars = write(STDOUT_FILENO, instructions, charsRead);*/
-
 	close(fileDesc);
 
 	return (instructions);
-}
-
-void execute_instr(instruction_t instruction, stack_t *stack)
-{
-	/*if (opcodeIs("push"))
-		instruction.f(&stack, 0);
-	else if (opcodeIs("pall"))
-		instruction.f(&stack, 0);*/
-
 }
