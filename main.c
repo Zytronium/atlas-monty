@@ -105,9 +105,15 @@ char *get_file_contents(const char *filename) // TODO
 {
 	int fileDesc;
 	ssize_t charsRead;
-	char instructions[INT_MAX];
+	char *instructions = malloc(INT_MAX);
 
 	/*instructions = malloc(sizeof(char) * letters + 1);*/
+
+	if (instructions == NULL)
+	{
+		fprintf(stderr, "Error: malloc failed\n");
+		exit(EXIT_FAILURE);
+	}
 
 	if (filename == NULL/* || instructions == NULL*/)
 		return (0);
@@ -120,7 +126,7 @@ char *get_file_contents(const char *filename) // TODO
 		return (0);
 	}
 
-	charsRead = read(fileDesc, instructions, INT_MAX);
+	charsRead = read(fileDesc, instructions, INT_MAX - 1);
 
 	if (charsRead <= 0)
 	{
@@ -134,7 +140,7 @@ char *get_file_contents(const char *filename) // TODO
 
 	close(fileDesc);
 
-	return (&instructions[0]);
+	return (instructions);
 }
 
 void execute_instr(instruction_t instruction, stack_t *stack)
