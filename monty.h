@@ -22,9 +22,8 @@
 
 #endif /* opcodeIs */
 
-
 #ifndef MAX_LETTER_CNT
-#define MAX_LETTER_CNT 16
+#define MAX_LETTER_CNT 5
 
 #endif /* MAX_LETTER_CNT */
 
@@ -39,7 +38,7 @@
 #endif /* MAX_LINE_CNT */
 
 #ifndef MAX_FILE_SIZE
-#define MAX_FILE_SIZE 65536 /*MAX_LINE_CNT * MAX_WORD_CNT * MAX_LETTER_CNT*/
+#define MAX_FILE_SIZE 20480 /*MAX_LINE_CNT * MAX_WORD_CNT * MAX_LETTER_CNT*/
 
 #endif /* MAX_FILE_SIZE */
 

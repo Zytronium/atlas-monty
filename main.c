@@ -186,7 +186,7 @@ char *getFileContents(const char *filename)
 		return (NULL);
 	}
 
-	charsRead = read(fileDesc, instructions, MAX_FILE_SIZE); /* file size limit */
+	charsRead = read(fileDesc, instructions, MAX_FILE_SIZE - 1); /* file size limit */
 	if (charsRead <= 0)
 	{
 		free(instructions);
