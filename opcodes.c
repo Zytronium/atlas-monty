@@ -14,6 +14,12 @@ int push(char *n, int lineNum, stack_t **stack)
 	int number, stackIsNull = *stack == NULL;
 	stack_t *newElmnt;
 
+	if (n == NULL)
+	{
+		fprintf(stderr, "L%d: usage: push integer\n", lineNum);
+		return (0); /* indicate failure */
+	}
+
 	if (isNumber(n)) /* check if input is a valid number */
 		number = atoi(n); /* set value for number */
 	else /* print error msg */

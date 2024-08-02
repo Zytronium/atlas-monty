@@ -16,9 +16,9 @@ int main(int argc, char *argv[])
 
 	if (argc != 2) /* no file name given */
 	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
+		/*fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);*/
+		argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";
 	}
 
 	parsedInstructions = malloc(sizeof(char **) * MAX_LINE_CNT); /*char limit of 1023 + null byte */
@@ -92,7 +92,7 @@ int parseInstructions(char *instructions, char ***dest)
 			/* TODO: probably need to add a null byte */
 			parsedWord++;
 			parsedLetter = 0;
-			dest[parsedLine][parsedWord] = malloc(sizeof(char) * 16);
+			dest[parsedLine][parsedWord] = malloc(sizeof(char) * MAX_LETTER_CNT);
 			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
 		}
@@ -102,10 +102,10 @@ int parseInstructions(char *instructions, char ***dest)
 			parsedLine++;
 			parsedLetter = 0;
 			parsedWord = 0;
-			dest[parsedLine] = malloc(sizeof(char) * 64);
+			dest[parsedLine] = malloc(sizeof(char *) * MAX_WORD_CNT);
 			if (dest[parsedLine] == NULL)
 				return (0); /* indicate malloc failure */
-			dest[parsedLine][parsedWord] = malloc(sizeof(char) * 16);
+			dest[parsedLine][parsedWord] = malloc(sizeof(char) * MAX_LETTER_CNT);
 			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
 		}
