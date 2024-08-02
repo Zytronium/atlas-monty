@@ -11,6 +11,7 @@
 int main(int argc, char *argv[])
 {
 	stack_t *stack = NULL;
+	int execRtn;
 	char *instructions, ***parsedInstructions;
 
 	if (argc != 2) /* no file name given */
@@ -20,22 +21,28 @@ int main(int argc, char *argv[])
 		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
 
-	parsedInstructions = malloc(1000); /*char limit of 1023 + null byte */
+	parsedInstructions = malloc(sizeof(char **) * MAX_LINE_CNT); /*char limit of 1023 + null byte */
 	if (parsedInstructions == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed");
 		exit(EXIT_FAILURE);
 	}
 
-	/* TODO: read file and execute its code */
 	instructions = getFileContents(argv[1]); /* read file and get contents */
 
-	parseInstructions(instructions, parsedInstructions);
-	executeInstructions(parsedInstructions, stack); /* execute instructions */
-
+	if (parseInstructions(instructions, parsedInstructions) == 0)
+	{
+		freeParsedInstr(parsedInstructions);
+		free(instructions);
+		fprintf(stderr, "Error: malloc failed");
+		exit(EXIT_FAILURE);
+	}
+	/* execute instructions and free memory */
+	execRtn = executeInstructions(parsedInstructions, stack);
 	freeParsedInstr(parsedInstructions);
 	free(instructions);
-	return (EXIT_SUCCESS);
+
+	return (!execRtn); /*EXIT_SUCCESS if executeInstructions() didn't fail*/
 }
 
 void freeParsedInstr(char ***parsedInstructions)
@@ -55,12 +62,16 @@ void freeParsedInstr(char ***parsedInstructions)
 	free(parsedInstructions);
 }
 
-void parseInstructions(char *instructions, char ***dest)
+int parseInstructions(char *instructions, char ***dest)
 {
 	int parsedLine= 0, parsedWord = 0, parsedLetter = 0;
 
 	dest[0] = malloc(sizeof(char *) * 64); /* line limit of 64 */
+	if (dest[0] == NULL)
+		return (0); /* indicate malloc failure */
 	dest[0][0] = malloc(sizeof(char) * 16); /* char limit of 16 per word (leaving space for long words in comments) */
+	if (dest[0][0] == NULL)
+		return (0); /* indicate malloc failure */
 
 	/*
 	 * I parse it this way instead of with strtok because I'm not too familiar
@@ -81,6 +92,8 @@ void parseInstructions(char *instructions, char ***dest)
 			parsedWord++;
 			parsedLetter = 0;
 			dest[parsedLine][parsedWord] = malloc(sizeof(char) * 16);
+			if (dest[parsedLine][parsedWord] == NULL)
+				return (0); /* indicate malloc failure */
 		}
 		else
 		{
@@ -89,10 +102,15 @@ void parseInstructions(char *instructions, char ***dest)
 			parsedLetter = 0;
 			parsedWord = 0;
 			dest[parsedLine] = malloc(sizeof(char) * 64);
+			if (dest[parsedLine] == NULL)
+				return (0); /* indicate malloc failure */
 			dest[parsedLine][parsedWord] = malloc(sizeof(char) * 16);
+			if (dest[parsedLine][parsedWord] == NULL)
+				return (0); /* indicate malloc failure */
 		}
 		instructions++;
 	}
+	return (1);
 }
 /*
  * note:
@@ -106,7 +124,7 @@ void parseInstructions(char *instructions, char ***dest)
  * @instructions: the string of instructions TODO: maybe make this the linked list/array of instructions instead.
  * @stack: the stack
  *
- * Return: 1 on success, -1 on failure
+ * Return: 1 on success, 0 on failure
  */
 int executeInstructions(char ***instructions, stack_t *stack)
 {
@@ -119,14 +137,15 @@ int executeInstructions(char ***instructions, stack_t *stack)
 
 		if (opcodeIs("push"))
 		{
-			push(instructions[lineNum][1], lineNum, stack);
+			if(push(instructions[lineNum][1], lineNum, stack) == 0)
+				return (0); /* indicate failure */
 		}
 		else if (opcodeIs("pall"))
 			pall(lineNum, stack);
 		else if (!opcodeIs("nop") && !opcodeIs(""))
 		{
 			fprintf(stderr, "L%d: unknown instruction %s\n", lineNum, opcode);
-			exit(EXIT_FAILURE);
+			return (0); /* indicate failure */
 		}
 		lineNum++;
 	}
@@ -144,9 +163,7 @@ char *getFileContents(const char *filename)
 {
 	int fileDesc;
 	ssize_t charsRead;
-	char *instructions = malloc(1000);
-
-	/*instructions = malloc(sizeof(char) * letters + 1);*/
+	char *instructions = malloc(MAX_FILE_SIZE);
 
 	if (instructions == NULL)
 	{
@@ -161,7 +178,6 @@ char *getFileContents(const char *filename)
 	}
 
 	fileDesc = open(filename, O_RDONLY);
-
 	if (fileDesc == -1)
 	{
 		free(instructions);
@@ -169,8 +185,7 @@ char *getFileContents(const char *filename)
 		return (NULL);
 	}
 
-	charsRead = read(fileDesc, instructions, 1000); /* char limit of 1000 */
-
+	charsRead = read(fileDesc, instructions, MAX_FILE_SIZE); /* file size limit */
 	if (charsRead <= 0)
 	{
 		free(instructions);
@@ -179,7 +194,6 @@ char *getFileContents(const char *filename)
 	}
 
 	instructions[charsRead + 1] = '\0';
-
 	close(fileDesc);
 
 	return (instructions);

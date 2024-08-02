@@ -6,8 +6,10 @@
  *
  * @n: integer or element to push.
  * @lineNum: line number of current opcode
+ *
+ * Return: 1 on success; 0 on failure.
  */
-void push(char *n, int lineNum, stack_t *stack)
+int push(char *n, int lineNum, stack_t *stack)
 {
 	int number, stackIsNull = stack == NULL;
 	stack_t *newElmnt;
@@ -15,17 +17,27 @@ void push(char *n, int lineNum, stack_t *stack)
 	if (isNumber(n)) /* check if input is a valid number */
 		number = atoi(n); /* set value for number */
 	else /* print error msg */
+	{
 		fprintf(stderr, "L%d: usage: push integer\n", lineNum);
+		return (0); /* indicate failure */
+	}
 
 	newElmnt = malloc(sizeof(stack_t)); /* malloc new element */
 	if (newElmnt == NULL) /* malloc fail check */
 	{
 		fprintf(stderr, "Error: malloc failed\n");
-		exit(EXIT_FAILURE);
+		return (0); /* indicate failure */
 	}
 
 	if (stackIsNull) /* malloc stack if it's empty */
+	{
 		stack = malloc(sizeof(stack_t));
+		if (stack == NULL) /* malloc fail check */
+		{
+			fprintf(stderr, "Error: malloc failed\n");
+			return (0); /* indicate failure */
+		}
+	}
 
 	/* init newElmnt */
 	newElmnt->n = number;
@@ -38,6 +50,8 @@ void push(char *n, int lineNum, stack_t *stack)
 	}
 	else
 		getTopElement(stack)->next = newElmnt;
+
+	return (1);
 }
 
 /**

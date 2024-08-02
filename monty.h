@@ -22,6 +22,27 @@
 
 #endif /* opcodeIs */
 
+
+#ifndef MAX_LETTER_CNT
+#define MAX_LETTER_CNT 16
+
+#endif /* MAX_LETTER_CNT */
+
+#ifndef MAX_WORD_CNT
+#define MAX_WORD_CNT 4
+
+#endif /* MAX_WORD_CNT */
+
+#ifndef MAX_LINE_CNT
+#define MAX_LINE_CNT 1024
+
+#endif /* MAX_LINE_CNT */
+
+#ifndef MAX_FILE_SIZE
+#define MAX_FILE_SIZE 65536 /*MAX_LINE_CNT * MAX_WORD_CNT * MAX_LETTER_CNT*/
+
+#endif /* MAX_FILE_SIZE */
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -57,10 +78,10 @@ typedef struct instruction_s
 int isNumber(char *number);
 stack_t *getTopElement(stack_t *stack);
 char *getFileContents(const char *filename);
-void parseInstructions(char *instructions, char ***dest);
+int parseInstructions(char *instructions, char ***dest);
 int executeInstructions(char ***instructions, stack_t *stack);
 void freeParsedInstr(char ***parsedInstructions);
-void push(char *n, int lineNum, stack_t *stack);
+int push(char *n, int lineNum, stack_t *stack);
 void pall(int lineNum, stack_t *stack);
 /* ------------------- */
 
