@@ -9,9 +9,9 @@
  *
  * Return: 1 on success; 0 on failure.
  */
-int push(char *n, int lineNum, stack_t *stack)
+int push(char *n, int lineNum, stack_t **stack)
 {
-	int number, stackIsNull = stack == NULL;
+	int number, stackIsNull = *stack == NULL;
 	stack_t *newElmnt;
 
 	if (isNumber(n)) /* check if input is a valid number */
@@ -31,40 +31,41 @@ int push(char *n, int lineNum, stack_t *stack)
 
 	if (stackIsNull) /* malloc stack if it's empty */
 	{
-		stack = malloc(sizeof(stack_t));
-		if (stack == NULL) /* malloc fail check */
+		*stack = malloc(sizeof(stack_t));
+		if (*stack == NULL) /* malloc fail check */
 		{
 			fprintf(stderr, "Error: malloc failed\n");
 			return (0); /* indicate failure */
 		}
-	}
-
-	/* init newElmnt */
-	newElmnt->n = number;
-	newElmnt->prev = getTopElement(stack);
-	newElmnt->next = NULL;
-	if (stackIsNull)
-	{
-		printf("stack is null, yo\n");
-		*stack = *newElmnt;
+		printf("The stack is null. Setting new instruction as head of stack.\n");
 		free(newElmnt);
+		/* init newElmnt */
+		(*stack)->n = number;
+		(*stack)->prev = NULL;
+		(*stack)->next = NULL;
 	}
 	else
-		getTopElement(stack)->next = newElmnt;
+	{
+		/* init newElmnt */
+		newElmnt->n = number;
+		newElmnt->prev = getTopElement(*stack);
+		newElmnt->next = NULL;
+		getTopElement(*stack)->next = newElmnt;
+	}
 
-	return (1);
+	return (1); /* indicate success */
 }
 
 /**
  * pass - prints all values on the stack starting from the top.
- *
  * @lineNum: line number of current opcode
+ * @stack: pointer to the stack
  */
 void pall(int lineNum, stack_t *stack)
 {
 	stack_t *i = getTopElement(stack);
 
-	(void) lineNum;
+	(void) lineNum; /* might need later */
 
 	while (i != NULL)
 	{
@@ -75,6 +76,7 @@ void pall(int lineNum, stack_t *stack)
 
 /**
  * getTopElement - gets the element at the top of the stack
+ * @stack: pointer to the stack
  * Return: last element in the stack, or null if stack is empty.
  */
 stack_t *getTopElement(stack_t *stack)
