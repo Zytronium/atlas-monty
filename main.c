@@ -60,6 +60,13 @@ void parseInstructions(char *instructions, char ***dest)
 
 	dest[0] = malloc(sizeof(char) * 64); /*character limit of 63 + null byte*/
 	dest[0][0] = malloc(sizeof(char) * 16); /* char limit of 16 per word (leaving space for long words in comments) */
+
+	/*
+	 * I parse it this way instead of with strtok because I'm not too familiar
+	 * with strtok, and I've done something similar on a personal project in
+	 * another language. It basically creates an array of lines, which are
+	 * arrays of words, which are strings.
+	 */
 	while (*instructions)
 	{
 		if (*instructions != '\n' && *instructions != ' ')
