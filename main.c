@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
 		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
 
+	return (98);
+
 	parsedInstructions = malloc(sizeof(char **) * MAX_LINE_CNT); /*char limit of 1023 + null byte */
 	if (parsedInstructions == NULL)
 	{
@@ -138,11 +140,15 @@ int executeInstructions(char ***instructions, stack_t *stack)
 
 		if (opcodeIs("push"))
 		{
+			printf("pushing %s\n", instructions[lineNum][1]);
 			if(push(instructions[lineNum][1], lineNum, stack) == 0)
 				return (0); /* indicate failure */
 		}
 		else if (opcodeIs("pall"))
+		{
+			printf("printing all\n");
 			pall(lineNum, stack);
+		}
 		else if (!opcodeIs("nop") && !opcodeIs(""))
 		{
 			fprintf(stderr, "L%d: unknown instruction %s\n", lineNum, opcode);

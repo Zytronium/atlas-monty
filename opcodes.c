@@ -45,6 +45,7 @@ int push(char *n, int lineNum, stack_t *stack)
 	newElmnt->next = NULL;
 	if (stackIsNull)
 	{
+		printf("stack is null, yo\n");
 		*stack = *newElmnt;
 		free(newElmnt);
 	}
@@ -81,7 +82,10 @@ stack_t *getTopElement(stack_t *stack)
 	stack_t *tail = stack;
 
 	if (tail == NULL)
+	{
+		printf("stack is null.\n");
 		return (NULL);
+	}
 
 	while (tail->next != NULL)
 	{
