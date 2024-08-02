@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
 
-	return (98);
+	return (1);
 
 	parsedInstructions = malloc(sizeof(char **) * MAX_LINE_CNT); /*char limit of 1023 + null byte */
 	if (parsedInstructions == NULL)
