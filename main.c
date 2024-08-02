@@ -28,23 +28,43 @@ int main(int argc, char *argv[])
 	}
 
 	/* TODO: read file and execute its code */
-	instructions = get_file_contents(argv[1]); /* read file and get contents */
+	instructions = getFileContents(argv[1]); /* read file and get contents */
 
-	parse_instructions(instructions, parsedInstructions);
-	execute_instructions(parsedInstructions, stack); /* execute instructions */
-	free(parsedInstructions);
+	parseInstructions(instructions, parsedInstructions);
+	executeInstructions(parsedInstructions, stack); /* execute instructions */
+
+	freeParsedInstr(parsedInstructions);
 	free(instructions);
 	return (EXIT_SUCCESS);
 }
 
-void parse_instructions(char *instructions, char ***dest)
+void freeParsedInstr(char ***parsedInstructions)
+{
+	int i = 0, j = 0;
+
+	while (parsedInstructions[i] != NULL)
+	{
+		while (parsedInstructions[i][j] != NULL)
+		{
+			free(parsedInstructions[i][j]);
+		}
+		free(parsedInstructions[i]);
+		i++;
+	}
+	free(parsedInstructions);
+}
+
+void parseInstructions(char *instructions, char ***dest)
 {
 	int parsedLine= 0, parsedWord = 0, parsedLetter = 0;
+
+	dest[0] = malloc(sizeof(char) * 64); /*character limit of 63 + null byte*/
+	dest[0][0] = malloc(sizeof(char) * 16); /* char limit of 16 per word (leaving space for long words in comments) */
 	while (*instructions)
 	{
 		if (*instructions != '\n' && *instructions != ' ')
 		{
-			dest[parsedLine][parsedWord][parsedLetter] = *instructions; /* segfaults here because dest is somehow NULL */
+			dest[parsedLine][parsedWord][parsedLetter] = *instructions; /* segfaults here for unknown reason */
 			parsedLetter++;
 		}
 		else if (*instructions == ' ')
@@ -52,6 +72,7 @@ void parse_instructions(char *instructions, char ***dest)
 			/* TODO: probably need to add a null byte */
 			parsedWord++;
 			parsedLetter = 0;
+			dest[parsedLine][parsedWord] = malloc(sizeof(char) * 16);
 		}
 		else
 		{
@@ -59,6 +80,7 @@ void parse_instructions(char *instructions, char ***dest)
 			parsedLine++;
 			parsedLetter = 0;
 			parsedWord = 0;
+			dest[parsedLine] = malloc(sizeof(char) * 64);
 		}
 		instructions++;
 	}
@@ -70,14 +92,14 @@ void parse_instructions(char *instructions, char ***dest)
  */
 
 /**
- * execute_instructions - execute the instructions provided
+ * executeInstructions - execute the instructions provided
  *
  * @instructions: the string of instructions TODO: maybe make this the linked list/array of instructions instead.
  * @stack: the stack
  *
  * Return: 1 on success, -1 on failure
  */
-int execute_instructions(char ***instructions, stack_t *stack)
+int executeInstructions(char ***instructions, stack_t *stack)
 {
 	int lineNum = 0;
 	char *opcode;
@@ -103,13 +125,13 @@ int execute_instructions(char ***instructions, stack_t *stack)
 }
 
 /**
- * get_file_contents - Reads a file and returns its contents
+ * getFileContents - Reads a file and returns its contents
  *
  * @filename: the name of the file to read
  *
  * Return: the contents of the file, or NULL on failure.
  */
-char *get_file_contents(const char *filename)
+char *getFileContents(const char *filename)
 {
 	int fileDesc;
 	ssize_t charsRead;
@@ -139,7 +161,7 @@ char *get_file_contents(const char *filename)
 	if (charsRead <= 0)
 	{
 		close(fileDesc);
-		return (0);
+		return (NULL);
 	}
 
 	instructions[charsRead + 1] = '\0';

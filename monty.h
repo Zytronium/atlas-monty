@@ -56,9 +56,10 @@ typedef struct instruction_s
 /* ↓ FUNCTIONS ↓ */
 int isNumber(char *number);
 stack_t *getTopElement(stack_t *stack);
-char *get_file_contents(const char *filename);
-void parse_instructions(char *instructions, char ***dest);
-int execute_instructions(char ***instructions, stack_t *stack);
+char *getFileContents(const char *filename);
+void parseInstructions(char *instructions, char ***dest);
+int executeInstructions(char ***instructions, stack_t *stack);
+void freeParsedInstr(char ***parsedInstructions);
 void push(char *n, int lineNum, stack_t *stack);
 void pall(int lineNum, stack_t *stack);
 /* ------------------- */
