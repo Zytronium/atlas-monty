@@ -9,7 +9,7 @@
  */
 void push(char *n, int lineNum, stack_t *stack)
 {
-	int number;
+	int number, stackIsNull = stack == NULL;
 	stack_t *newElmnt;
 
 	if (isNumber(n)) /* check if input is a valid number */
@@ -24,11 +24,20 @@ void push(char *n, int lineNum, stack_t *stack)
 		exit(EXIT_FAILURE);
 	}
 
+	if (stackIsNull) /* malloc stack if it's empty */
+		stack = malloc(sizeof(stack_t));
+
 	/* init newElmnt */
 	newElmnt->n = number;
 	newElmnt->prev = getTopElement(stack);
 	newElmnt->next = NULL;
-	getTopElement(stack)->next = newElmnt;
+	if (stackIsNull)
+	{
+		stack = newElmnt;
+		free(newElmnt);
+	}
+	else
+		getTopElement(stack)->next = newElmnt;
 }
 
 /**
@@ -51,11 +60,14 @@ void pall(int lineNum, stack_t *stack)
 
 /**
  * getTopElement - gets the element at the top of the stack
- * Return: last element in the stack
+ * Return: last element in the stack, or null if stack is empty.
  */
 stack_t *getTopElement(stack_t *stack)
 {
 	stack_t *tail = stack;
+
+	if (tail == NULL)
+		return (NULL);
 
 	while (tail->next != NULL)
 	{

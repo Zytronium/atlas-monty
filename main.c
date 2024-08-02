@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
 
-	parsedInstructions = malloc(INT_MAX);
+	parsedInstructions = malloc(1000); /*char limit of 1023 + null byte */
 	if (parsedInstructions == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed");
@@ -47,6 +47,7 @@ void freeParsedInstr(char ***parsedInstructions)
 		while (parsedInstructions[i][j] != NULL)
 		{
 			free(parsedInstructions[i][j]);
+			j++;
 		}
 		free(parsedInstructions[i]);
 		i++;
@@ -58,7 +59,7 @@ void parseInstructions(char *instructions, char ***dest)
 {
 	int parsedLine= 0, parsedWord = 0, parsedLetter = 0;
 
-	dest[0] = malloc(sizeof(char) * 64); /*character limit of 63 + null byte*/
+	dest[0] = malloc(sizeof(char *) * 64); /* line limit of 64 */
 	dest[0][0] = malloc(sizeof(char) * 16); /* char limit of 16 per word (leaving space for long words in comments) */
 
 	/*
@@ -88,6 +89,7 @@ void parseInstructions(char *instructions, char ***dest)
 			parsedLetter = 0;
 			parsedWord = 0;
 			dest[parsedLine] = malloc(sizeof(char) * 64);
+			dest[parsedLine][parsedWord] = malloc(sizeof(char) * 16);
 		}
 		instructions++;
 	}
@@ -121,7 +123,7 @@ int executeInstructions(char ***instructions, stack_t *stack)
 		}
 		else if (opcodeIs("pall"))
 			pall(lineNum, stack);
-		else if (!opcodeIs("nop"))
+		else if (!opcodeIs("nop") && !opcodeIs(""))
 		{
 			fprintf(stderr, "L%d: unknown instruction %s\n", lineNum, opcode);
 			exit(EXIT_FAILURE);
@@ -142,7 +144,7 @@ char *getFileContents(const char *filename)
 {
 	int fileDesc;
 	ssize_t charsRead;
-	char *instructions = malloc(INT_MAX);
+	char *instructions = malloc(1000);
 
 	/*instructions = malloc(sizeof(char) * letters + 1);*/
 
@@ -153,20 +155,25 @@ char *getFileContents(const char *filename)
 	}
 
 	if (filename == NULL)
+	{
+		free(instructions);
 		return (NULL);
+	}
 
 	fileDesc = open(filename, O_RDONLY);
 
 	if (fileDesc == -1)
 	{
+		free(instructions);
 		close(fileDesc);
 		return (NULL);
 	}
 
-	charsRead = read(fileDesc, instructions, INT_MAX - 1);
+	charsRead = read(fileDesc, instructions, 1000); /* char limit of 1000 */
 
 	if (charsRead <= 0)
 	{
+		free(instructions);
 		close(fileDesc);
 		return (NULL);
 	}
