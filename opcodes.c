@@ -45,7 +45,7 @@ int push(char *n, int lineNum, stack_t *stack)
 	newElmnt->next = NULL;
 	if (stackIsNull)
 	{
-		stack = newElmnt;
+		*stack = *newElmnt;
 		free(newElmnt);
 	}
 	else
