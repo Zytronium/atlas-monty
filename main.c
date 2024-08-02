@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
-	}			
+	}
 
 	parsedInstructions = malloc(sizeof(char **) * MAX_LINE_CNT); /*char limit of 1023 + null byte */
 	if (parsedInstructions == NULL)
@@ -58,6 +58,7 @@ void freeParsedInstr(char ***parsedInstructions)
 		}
 		free(parsedInstructions[i]);
 		i++;
+		j = 0;
 	}
 	free(parsedInstructions);
 }
