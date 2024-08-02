@@ -37,7 +37,6 @@ int push(char *n, int lineNum, stack_t **stack)
 			fprintf(stderr, "Error: malloc failed\n");
 			return (0); /* indicate failure */
 		}
-		printf("The stack is null. Setting new instruction as head of stack.\n");
 		free(newElmnt);
 		/* init newElmnt */
 		(*stack)->n = number;
@@ -84,10 +83,7 @@ stack_t *getTopElement(stack_t *stack)
 	stack_t *tail = stack;
 
 	if (tail == NULL)
-	{
-		printf("stack is null.\n");
 		return (NULL);
-	}
 
 	while (tail->next != NULL)
 	{
