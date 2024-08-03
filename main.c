@@ -105,7 +105,8 @@ int parseInstructions(char *instructions, char ***dest)
 			dest[parsedLine][parsedWord][parsedLetter] = instructions[i];
 			parsedLetter++;
 		}
-		else if ((instructions[i] == ' ' || instructions[i] == '\t') && !(i > 0 && !(instructions[i - 1] != ' ' || instructions[i - 1] != '\t')))
+		else if ((instructions[i] == ' ' || instructions[i] == '\t') &&
+				(i > 0 && (instructions[i - 1] != ' ' && instructions[i - 1] != '\t')))
 		{
 			/* TODO: probably need to add a null byte */
 			parsedWord++;
@@ -114,7 +115,7 @@ int parseInstructions(char *instructions, char ***dest)
 			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
 		}
-		else
+		else if (i > 0 && (instructions[i - 1] != ' ' && instructions[i - 1] != '\t'))
 		{
 			/* TODO: may need to add a null byte */
 			parsedLine++;
