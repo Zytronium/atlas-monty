@@ -37,8 +37,6 @@ int main(int argc, char *argv[])
 		exitRtn = EXIT_FAILURE;
 		goto end;
 	}
-	exitRtn = EXIT_FAILURE;
-	goto end;
 	if (parseInstructions(instructions, parsedInstructions) == 0)
 	{
 		fprintf(stderr, "Error: malloc failed");
@@ -57,7 +55,7 @@ int main(int argc, char *argv[])
 
 	freeStack(stack);
 
-	return (exitRtn);
+	return (EXIT_FAILURE);
 }
 
 void freeParsedInstr(char ***parsedInstructions)
