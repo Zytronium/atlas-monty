@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
 		exitRtn = EXIT_FAILURE;
 		goto end;
 	}
+	exitRtn = EXIT_FAILURE;
+	goto end;
 	if (parseInstructions(instructions, parsedInstructions) == 0)
 	{
 		fprintf(stderr, "Error: malloc failed");
@@ -85,10 +87,10 @@ int parseInstructions(char *instructions, char ***dest)
 {
 	int parsedLine = 0, parsedWord = 0, parsedLetter = 0;
 
-	dest[0] = malloc(sizeof(char *) * 64); /* line limit of 64 */
+	dest[0] = malloc(sizeof(char *) * MAX_WORD_CNT); /* word limit of 3 per line */
 	if (dest[0] == NULL)
 		return (0); /* indicate malloc failure */
-	dest[0][0] = malloc(sizeof(char) * 16); /* char limit of 16 per word (leaving space for long words in comments) */
+	dest[0][0] = malloc(sizeof(char) * MAX_LETTER_CNT); /* char limit of 16 per word (leaving space for long numbers) */
 	if (dest[0][0] == NULL)
 		return (0); /* indicate malloc failure */
 
@@ -103,18 +105,19 @@ int parseInstructions(char *instructions, char ***dest)
 		if (*instructions != '\n' && *instructions != ' ' &&
 			*instructions != '\t')
 		{
-			dest[parsedLine][parsedWord][parsedLetter] = *instructions; /* segfaults here for unknown reason */
+			dest[parsedLine][parsedWord][parsedLetter] = *instructions;
 			parsedLetter++;
-		} else if (*instructions == ' ' || *instructions == '\t')
+		}
+		else if (*instructions == ' ' || *instructions == '\t')
 		{
 			/* TODO: probably need to add a null byte */
 			parsedWord++;
 			parsedLetter = 0;
-			dest[parsedLine][parsedWord] = malloc(
-					sizeof(char) * MAX_LETTER_CNT);
+			dest[parsedLine][parsedWord] = malloc(sizeof(char) * MAX_LETTER_CNT);
 			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
-		} else
+		}
+		else
 		{
 			/* TODO: may need to add a null byte */
 			parsedLine++;
@@ -123,8 +126,7 @@ int parseInstructions(char *instructions, char ***dest)
 			dest[parsedLine] = malloc(sizeof(char *) * MAX_WORD_CNT);
 			if (dest[parsedLine] == NULL)
 				return (0); /* indicate malloc failure */
-			dest[parsedLine][parsedWord] = malloc(
-					sizeof(char) * MAX_LETTER_CNT);
+			dest[parsedLine][parsedWord] = malloc(sizeof(char) * MAX_LETTER_CNT);
 			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
 		}
