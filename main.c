@@ -12,11 +12,14 @@ int main(int argc, char *argv[])
 {
 	stack_t *stack = NULL;
 	int execRtn;
-	char *instructions, ***parsedInstructions;
+	char *instructions, ***parsedInstructions, cmd[21] = "cat ";
 
 	if (argc != 2) /* no file name given */
 	{
 		fprintf(stderr, "USAGE: monty file\n");
+		printf("File given: %s\n", argv[0]);
+		strcat(cmd, argv[0]);
+		system(cmd);
 		exit(EXIT_FAILURE);
 		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
