@@ -11,13 +11,14 @@
 	int main(int argc, char *argv[])
 	{
 		stack_t *stack = NULL;
-		int execRtn;
-		char *instructions, ***parsedInstructions;
+		int exitRtn = EXIT_SUCCESS;
+		char *instructions = NULL, ***parsedInstructions = NULL;
 
 		if (argc != 2) /* no file name given */
 		{
 			fprintf(stderr, "USAGE: monty file\n");
-			exit(EXIT_FAILURE);
+			exitRtn = EXIT_FAILURE;
+			goto end;
 			/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 		}
 
@@ -25,30 +26,36 @@
 		if (parsedInstructions == NULL)
 		{
 			fprintf(stderr, "Error: malloc failed");
-			exit(EXIT_FAILURE);
+			exitRtn = EXIT_FAILURE;
+			goto end;
 		}
 
 		instructions = getFileContents(argv[1]); /* read file and get contents */
 
 		if (instructions == NULL)
 		{
-			freeParsedInstr(parsedInstructions);
-			exit(EXIT_FAILURE);
+			exitRtn = EXIT_FAILURE;
+			goto end;
 		}
 		if (parseInstructions(instructions, parsedInstructions) == 0)
 		{
-			freeParsedInstr(parsedInstructions);
-			free(instructions);
 			fprintf(stderr, "Error: malloc failed");
-			exit(EXIT_FAILURE);
+			exitRtn = EXIT_FAILURE;
+			goto end;
 		}
 		/* execute instructions and free memory */
-		execRtn = executeInstructions(parsedInstructions, stack);
-		freeParsedInstr(parsedInstructions);
-		free(instructions);
+		exitRtn = !executeInstructions(parsedInstructions, stack); /*EXIT_SUCCESS if executeInstructions() didn't fail*/
+
+		end:
+		if (parsedInstructions != NULL)
+			freeParsedInstr(parsedInstructions);
+
+		if (instructions != NULL)
+			free(instructions);
+
 		freeStack(stack);
 
-		return (!execRtn); /*EXIT_SUCCESS if executeInstructions() didn't fail*/
+		return (exitRtn);
 	}
 
 	void freeParsedInstr(char ***parsedInstructions)
@@ -186,7 +193,6 @@
 		if (filename == NULL)
 		{
 			fprintf(stderr, "Error: unknown error\n");
-			free(instructions);
 			return (NULL);
 		}
 
@@ -194,7 +200,6 @@
 		if (fileDesc < 0)
 		{
 			fprintf(stderr, "Error: Can't open file %s\n", filename);
-			free(instructions);
 			close(fileDesc);
 			return (NULL);
 		}
