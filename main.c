@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 		free(instructions);
 
 	freeStack(stack);
-	exitRtn = EXIT_FAILURE;
+
 	return (exitRtn);
 }
 
@@ -93,7 +93,7 @@ int parseInstructions(char *instructions, char ***dest)
 		return (0); /* indicate malloc failure */
 
 	/*
-	 * I parse it this way instead of with strtok because I'm not too familiar
+	 * I parsed				 it this way instead of with strtok because I'm not too familiar
 	 * with strtok, and I've done something similar on a personal project in
 	 * another language. It basically creates an array of lines, which are
 	 * arrays of words, which are strings.
