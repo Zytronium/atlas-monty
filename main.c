@@ -166,7 +166,7 @@ int executeInstructions(char ***instructions, stack_t *stack)
 		}
 		else if (!opcodeIs("nop") && !opcodeIs(""))
 		{
-			fprintf(stderr, "L%d: unknown instruction %s\n", lineNum, opcode);
+			fprintf(stderr, "L%d: unknown instruction %s\n", lineNum + 1, opcode);
 			return (0); /* indicate failure */
 		}
 		lineNum++;

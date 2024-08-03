@@ -16,7 +16,7 @@ int push(char *n, int lineNum, stack_t **stack)
 
 	if (n == NULL)
 	{
-		fprintf(stderr, "L%d: usage: push integer\n", lineNum);
+		fprintf(stderr, "L%d: usage: push integer\n", lineNum + 1);
 		return (0); /* indicate failure */
 	}
 
