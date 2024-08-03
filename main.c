@@ -18,7 +18,8 @@ int main(int argc, char *argv[])
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		/*printf("File given: %s\n", argv[0]);
-		system("cat ../*.c");*/
+		char star = '*';
+		system("cat ../" + star +".c");*/
 		exit(EXIT_FAILURE);
 		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
