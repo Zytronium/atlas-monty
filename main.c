@@ -46,13 +46,6 @@ int main(int argc, char *argv[])
 	if (executeInstructions(parsedInstructions, stack) == 0)
 		exitRtn = EXIT_FAILURE;
 
-	if (!exitRtn)
-	{
-		fprintf(stderr, "L%d: usage: push integer\n", 4);
-		fprintf(stdout, "file contents: %s\n", instructions);
-		exitRtn = EXIT_FAILURE;
-	}
-
 	end:
 	if (parsedInstructions != NULL)
 		freeParsedInstr(parsedInstructions);
@@ -89,7 +82,7 @@ void freeParsedInstr(char ***parsedInstructions)
 
 int parseInstructions(char *instructions, char ***dest)
 {
-	int parsedLine = 0, parsedWord = 0, parsedLetter = 0;
+	int parsedLine = 0, parsedWord = 0, parsedLetter = 0, i = 0;
 
 	dest[0] = malloc(sizeof(char *) * MAX_WORD_CNT); /* word limit of 3 per line */
 	if (dest[0] == NULL)
@@ -99,20 +92,20 @@ int parseInstructions(char *instructions, char ***dest)
 		return (0); /* indicate malloc failure */
 
 	/*
-	 * I parsed				 it this way instead of with strtok because I'm not too familiar
+	 * I parsed	it this way instead of with strtok because I'm not too familiar
 	 * with strtok, and I've done something similar on a personal project in
 	 * another language. It basically creates an array of lines, which are
 	 * arrays of words, which are strings.
 	 */
-	while (*instructions)
+	while (instructions[i])
 	{
-		if (*instructions != '\n' && *instructions != ' ' &&
-			*instructions != '\t')
+		if (instructions[i] != '\n' && instructions[i] != ' ' &&
+			instructions[i] != '\t')
 		{
-			dest[parsedLine][parsedWord][parsedLetter] = *instructions;
+			dest[parsedLine][parsedWord][parsedLetter] = instructions[i];
 			parsedLetter++;
 		}
-		else if (*instructions == ' ' || *instructions == '\t')
+		else if ((instructions[i] == ' ' || instructions[i] == '\t') && !(i > 0 && !(instructions[i - 1] != ' ' || instructions[i - 1] != '\t')))
 		{
 			/* TODO: probably need to add a null byte */
 			parsedWord++;
@@ -134,7 +127,7 @@ int parseInstructions(char *instructions, char ***dest)
 			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
 		}
-		instructions++;
+		i++;
 	}
 	return (1);
 }
