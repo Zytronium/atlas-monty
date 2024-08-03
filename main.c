@@ -187,7 +187,7 @@ char *getFileContents(const char *filename)
 	}
 
 	fileDesc = open(filename, O_RDONLY);
-	if (fileDesc == -1)
+	if (fileDesc < 0)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", filename);
 		free(instructions);
@@ -196,13 +196,13 @@ char *getFileContents(const char *filename)
 	}
 
 	charsRead = read(fileDesc, instructions, MAX_FILE_SIZE - 1); /* file size limit */
-	if (charsRead < 0)
+	/*if (charsRead == 0)
 	{
 		free(instructions);
 		close(fileDesc);
 		fprintf(stderr, "Error: Can't read file %s\n", filename);
 		return (NULL);
-	}
+	}*/
 
 	instructions[charsRead + 1] = '\0';
 	close(fileDesc);
