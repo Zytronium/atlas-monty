@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 	execRtn = executeInstructions(parsedInstructions, stack);
 	freeParsedInstr(parsedInstructions);
 	free(instructions);
+	freeStack(stack);
 
 	return (!execRtn); /*EXIT_SUCCESS if executeInstructions() didn't fail*/
 }
@@ -208,4 +209,25 @@ char *getFileContents(const char *filename)
 	close(fileDesc);
 
 	return (instructions);
+}
+
+/**
+ * freeStack - frees the stack from memory
+ * @stack the stack to free
+ */
+void freeStack(stack_t *stack)
+{
+	stack_t *tempStackNode = getTopElement(stack);
+
+	if (tempStackNode != NULL)
+	{
+		while (tempStackNode->prev != NULL)
+		{
+			tempStackNode = tempStackNode->prev;
+			free(tempStackNode->next);
+		}
+		free(tempStackNode);
+		free(stack);
+	}
+	free(stack);
 }
