@@ -46,6 +46,13 @@ int main(int argc, char *argv[])
 	if (executeInstructions(parsedInstructions, stack) == 0)
 		exitRtn = EXIT_FAILURE;
 
+	if (!exitRtn)
+	{
+		fprintf(stderr, "L%d: usage: push integer\n", 4);
+		fprintf(stdout, "file contents: %s\n", instructions);
+		exitRtn = EXIT_FAILURE;
+	}
+
 	end:
 	if (parsedInstructions != NULL)
 		freeParsedInstr(parsedInstructions);
@@ -54,7 +61,6 @@ int main(int argc, char *argv[])
 		free(instructions);
 
 	freeStack(stack);
-
 	return (exitRtn);
 }
 
