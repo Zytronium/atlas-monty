@@ -24,7 +24,7 @@ int push(char *n, int lineNum, stack_t **stack)
 		number = atoi(n); /* set value for number */
 	else /* print error msg */
 	{
-		fprintf(stderr, "L%d: usage: push integer\n", lineNum);
+		fprintf(stderr, "L%d: usage: push integer\n", lineNum + 1);
 		return (0); /* indicate failure */
 	}
 
