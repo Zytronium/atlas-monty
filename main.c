@@ -54,7 +54,11 @@ int main(int argc, char *argv[])
 		free(instructions);
 
 	freeStack(stack);
-	exitRtn = EXIT_FAILURE;
+	if (!exitRtn)
+	{
+		fprintf(stderr, "L%d: usage: push integer\n", 4);
+		exitRtn = EXIT_FAILURE;
+	}
 	return (exitRtn);
 }
 
