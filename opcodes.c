@@ -44,6 +44,7 @@ int push(char *n, int lineNum, stack_t **stack)
 			return (0); /* indicate failure */
 		}
 		free(newElmnt);
+		newElmnt = NULL;
 		/* init newElmnt */
 		(*stack)->n = number;
 		(*stack)->prev = NULL;
