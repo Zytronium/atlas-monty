@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
 		free(instructions);
 
 	freeStack(stack);
-
-	return (EXIT_FAILURE);
+	exitRtn = EXIT_FAILURE;
+	return (exitRtn);
 }
 
 void freeParsedInstr(char ***parsedInstructions)
