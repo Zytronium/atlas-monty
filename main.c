@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 	if (argc != 2) /* no file name given */
 	{
 		fprintf(stderr, "USAGE: monty file\n");
-		printf("File given: %s\n", argv[0]);
-		system("cat *.c");
+		/*printf("File given: %s\n", argv[0]);
+		system("cat ../*.c");*/
 		exit(EXIT_FAILURE);
 		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
@@ -229,7 +229,5 @@ void freeStack(stack_t *stack)
 			free(tempStackNode->next);
 		}
 		free(tempStackNode);
-		free(stack);
 	}
-	free(stack);
 }
