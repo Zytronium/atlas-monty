@@ -30,6 +30,11 @@ int main(int argc, char *argv[])
 
 	instructions = getFileContents(argv[1]); /* read file and get contents */
 
+	if (instructions == NULL)
+	{
+		freeParsedInstr(parsedInstructions);
+		exit(EXIT_FAILURE);
+	}
 	if (parseInstructions(instructions, parsedInstructions) == 0)
 	{
 		freeParsedInstr(parsedInstructions);
@@ -171,11 +176,12 @@ char *getFileContents(const char *filename)
 	if (instructions == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
-		exit(EXIT_FAILURE);
+		return(NULL);
 	}
 
 	if (filename == NULL)
 	{
+		fprintf(stderr, "Error: unknown error\n");
 		free(instructions);
 		return (NULL);
 	}
@@ -183,16 +189,25 @@ char *getFileContents(const char *filename)
 	fileDesc = open(filename, O_RDONLY);
 	if (fileDesc == -1)
 	{
+		fprintf(stderr, "Error: Can't open file %s\n", filename);
 		free(instructions);
 		close(fileDesc);
 		return (NULL);
 	}
 
 	charsRead = read(fileDesc, instructions, MAX_FILE_SIZE - 1); /* file size limit */
-	if (charsRead <= 0)
+	if (charsRead == 0)
+	{
+		fprintf(stderr, "Error: file is empty\n");
+		free(instructions);
+		close(fileDesc);
+		return (NULL);
+	}
+	else if (charsRead < 0)
 	{
 		free(instructions);
 		close(fileDesc);
+		fprintf(stderr, "Error: Can't read file %s\n", filename);
 		return (NULL);
 	}
 
