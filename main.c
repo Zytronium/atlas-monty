@@ -87,12 +87,12 @@ int parseInstructions(char *instructions, char ***dest)
 	 */
 	while (*instructions)
 	{
-		if (*instructions != '\n' && *instructions != ' ')
+		if (*instructions != '\n' && *instructions != ' ' && *instructions != '\t')
 		{
 			dest[parsedLine][parsedWord][parsedLetter] = *instructions; /* segfaults here for unknown reason */
 			parsedLetter++;
 		}
-		else if (*instructions == ' ')
+		else if (*instructions == ' ' || *instructions == '\t')
 		{
 			/* TODO: probably need to add a null byte */
 			parsedWord++;
