@@ -16,9 +16,9 @@ int main(int argc, char *argv[])
 
 	if (argc != 2) /* no file name given */
 	{
-		/*fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);*/
-		argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";
+		fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);
+		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
 
 	parsedInstructions = malloc(sizeof(char **) * MAX_LINE_CNT); /*char limit of 1023 + null byte */
