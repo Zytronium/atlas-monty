@@ -232,14 +232,18 @@ char *getFileContents(const char *filename)
  */
 void freeStack()
 {
-	if (stack != NULL)
+	stack_t *tempStackNode = getTopElement();
+
+	if (stack == NULL)
+		return;
+
+	if (tempStackNode != NULL)
 	{
-		while (stack->prev != NULL)
+		while (tempStackNode->prev != NULL)
 		{
-			stack = stack->prev;
-			free(stack->next);
+			tempStackNode = tempStackNode->prev;
+			free(tempStackNode->next);
 		}
-		free(stack);
+		free(tempStackNode);
 	}
 }
-
