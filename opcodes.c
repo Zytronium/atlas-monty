@@ -127,8 +127,8 @@ int swap(int lineNum)
 	}
 
 	swapN = top->n;
-	top->n = stack->n;
-	stack->n = swapN;
+	top->n = top->prev->n;
+	top->prev->n = swapN;
 
 	return (1);
 }
