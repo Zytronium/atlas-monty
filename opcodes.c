@@ -81,6 +81,26 @@ void pall(int lineNum, stack_t *stack)
 }
 
 /**
+ * pint - prints the number at the top of the stack
+ *
+ * @lineNum: line number this was called on in the Monty script
+ * @stack: the stack to print from
+ * Return: 1 on success, or 0 if the stack is empty to indicate failure.
+ */
+int pint(int lineNum, stack_t *stack)
+{
+	stack_t *top = getTopElement(stack);
+
+	if (stack == NULL)
+	{
+		fprintf(stderr, "L%d: can't pint, stack empty\n", lineNum);
+		return (0); /* indicate failure */
+	}
+
+	return (1);
+}
+
+/**
  * getTopElement - gets the element at the top of the stack
  * @stack: pointer to the stack
  * Return: last element in the stack, or null if stack is empty.

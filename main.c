@@ -154,7 +154,6 @@ int executeInstructions(char ***instructions, stack_t *stack)
 	while (instructions[lineNum])
 	{
 		opcode = instructions[lineNum][0];
-
 		if (opcodeIs("push"))
 		{
 			if (push(instructions[lineNum][1], lineNum, &stack) == 0)
@@ -235,4 +234,5 @@ void freeStack(stack_t *stack)
 		}
 		free(tempStackNode);
 	}
+	free(stack);
 }
