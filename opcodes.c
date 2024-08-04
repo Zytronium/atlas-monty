@@ -97,6 +97,8 @@ int pint(int lineNum, stack_t *stack)
 		return (0); /* indicate failure */
 	}
 
+	printf("%d\n", top->n);
+
 	return (1);
 }
 
