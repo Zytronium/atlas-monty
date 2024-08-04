@@ -159,14 +159,19 @@ int executeInstructions(char ***instructions, stack_t *stack)
 			if (push(instructions[lineNum][1], lineNum, &stack) == 0)
 				return (0); /* indicate failure */
 		}
-		else if (opcodeIs("pall"))
+		else if (opcodeIs("pop"))
 		{
-			pall(lineNum, stack);
+			if (pop(lineNum, stack) == 0)
+				return (0); /* indicate failure */
 		}
 		else if (opcodeIs("pint"))
 		{
 			if (pint(lineNum, stack) == 0)
 				return (0); /* indicate failure */
+		}
+		else if (opcodeIs("pall"))
+		{
+			pall(lineNum, stack);
 		}
 		else if (!opcodeIs("nop") && !opcodeIs(""))
 		{
