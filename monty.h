@@ -82,6 +82,7 @@ int executeInstructions(char ***instructions, stack_t *stack);
 void freeParsedInstr(char ***parsedInstructions);
 void freeStack(stack_t *stack);
 int push(char *n, int lineNum, stack_t **stack);
+int pop(int lineNum, stack_t *stack);
 void pall(int lineNum, stack_t *stack);
 int pint(int lineNum, stack_t *stack);
 /* ------------------- */

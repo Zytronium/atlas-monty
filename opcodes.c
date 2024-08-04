@@ -63,6 +63,31 @@ int push(char *n, int lineNum, stack_t **stack)
 }
 
 /**
+ * pop - removes the element at the top of the stack
+ *
+ * @lineNum: line number this was called on in the Monty script
+ * @stack: the stack to remove from
+ * Return: 1 on success, or 0 if the stack is empty to indicate failure.
+ */
+int pop(int lineNum, stack_t *stack)
+{
+	stack_t *top = getTopElement(stack);
+
+	if (stack == NULL)
+	{
+		fprintf(stderr, "L%d: can't pop an empty stack\n", lineNum + 1);
+		return (0); /* indicate failure */
+	}
+
+	/* remove top element and update new top element's next ptr */
+	if (top->prev != NULL)
+		top->prev->next = NULL;
+	free(top);
+
+	return (1);
+}
+
+/**
  * pass - prints all values on the stack starting from the top.
  * @lineNum: line number of current opcode
  * @stack: pointer to the stack
