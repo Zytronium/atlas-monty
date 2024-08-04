@@ -35,26 +35,14 @@ int push(char *n, int lineNum, stack_t **stack)
 		return (0); /* indicate failure */
 	}
 
-	/*if (stackIsNull) *//* malloc stack if it's empty *//*
-	{
-		*stack = malloc(sizeof(stack_t));
-		if (*stack == NULL) *//* malloc fail check *//*
-		{
-			fprintf(stderr, "Error: malloc failed\n");
-			return (0); *//* indicate failure *//*
-		}
-	}
-	else*/
-	{
-		/* init newElmnt */
-		newElmnt->n = number;
-		newElmnt->prev = top; /* top is null if stack is empty (null) */
-		newElmnt->next = NULL;
-		if (stackIsNull)
-			*stack = newElmnt; /* make stack point to newElmnt */
-		else
-			top->next = newElmnt; /* set old top elmnt's next ptr to newElmnt */
-	}
+	/* init newElmnt */
+	newElmnt->n = number;
+	newElmnt->prev = top; /* top is null if stack is empty (null) */
+	newElmnt->next = NULL;
+	if (stackIsNull)
+		*stack = newElmnt; /* make stack point to newElmnt */
+	else
+		top->next = newElmnt; /* set old top elmnt's next ptr to newElmnt */
 
 	return (1); /* indicate success */
 }
@@ -66,11 +54,11 @@ int push(char *n, int lineNum, stack_t **stack)
  * @stack: the stack to remove from
  * Return: 1 on success, or 0 if the stack is empty to indicate failure.
  */
-int pop(int lineNum, stack_t *stack)
+int pop(int lineNum, stack_t **stack)
 {
-	stack_t *top = getTopElement(stack);
+	stack_t *top = getTopElement(*stack);
 
-	if (stack == NULL)
+	if (*stack == NULL)
 	{
 		fprintf(stderr, "L%d: can't pop an empty stack\n", lineNum + 1);
 		return (0); /* indicate failure */
@@ -78,9 +66,12 @@ int pop(int lineNum, stack_t *stack)
 
 	/* remove top element and update new top element's next ptr */
 	if (top->prev != NULL)
+	{
 		top->prev->next = NULL;
-	/*free(top);*/
-	top = NULL;
+		top = NULL; /* free(top); caused a segfault */
+	}
+	else
+		*stack = NULL;
 
 	return (1);
 }
