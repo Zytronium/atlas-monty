@@ -63,7 +63,6 @@ int pop(int lineNum)
 		fprintf(stderr, "L%d: can't pop an empty stack\n", lineNum + 1);
 		return (0); /* indicate failure */
 	}
-
 	/* remove top element and update new top element's next ptr */
 	if (top->prev != NULL)
 	{
@@ -107,6 +106,29 @@ int pint(int lineNum)
 	}
 
 	printf("%d\n", top->n);
+
+	return (1);
+}
+
+/**
+ * swap - swaps the top two elements on the stack
+ * @lineNum: The current line number
+ * Return: 1 on success, or 0 on failure
+ */
+int swap(int lineNum)
+{
+	int swapN;
+	stack_t *top = getTopElement();
+
+	if (top == stack) /* if stack is null or stack is only 1 element */
+	{
+		fprintf(stderr, "L%d: can't swap, stack too short\n", lineNum + 1);
+		return (0);
+	}
+
+	swapN = top->n;
+	top->n = stack->n;
+	stack->n = swapN;
 
 	return (1);
 }

@@ -83,6 +83,7 @@ void freeParsedInstr(char ***parsedInstructions);
 void freeStack();
 int push(char *n, int lineNum);
 int pop(int lineNum);
+int swap(int lineNum);
 void pall();
 int pint(int lineNum);
 /* ------------------- */
