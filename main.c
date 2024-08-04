@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
 
 	if (argc != 2) /* no file name given */
 	{
-		/*fprintf(stderr, "USAGE: monty file\n");
+		fprintf(stderr, "USAGE: monty file\n");
 		exitRtn = EXIT_FAILURE;
-		goto end;*/
-		argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";
+		goto end;
+		/*argv[1] = "/home/SmartFridge/CLionProjects/atlas-monty/test_code.m";*/
 	}
 
 	parsedInstructions = malloc(sizeof(char **) * MAX_LINE_CNT); /*char limit of 1023 + null byte */
@@ -242,3 +242,4 @@ void freeStack()
 		free(tempStackNode);
 	}
 }
+
