@@ -1,5 +1,6 @@
 #include <string.h>
 #include "monty.h"
+extern stack_t *stack;
 
 /**
  * push - pushes an element to the stack
@@ -9,10 +10,10 @@
  *
  * Return: 1 on success; 0 on failure.
  */
-int push(char *n, int lineNum, stack_t **stack)
+int push(char *n, int lineNum)
 {
-	int number, stackIsNull = *stack == NULL;
-	stack_t *newElmnt, *top = getTopElement(*stack);
+	int number, stackIsNull = stack == NULL;
+	stack_t *newElmnt, *top = getTopElement();
 
 	if (n == NULL || !strcmp(n, ""))
 	{
@@ -40,7 +41,7 @@ int push(char *n, int lineNum, stack_t **stack)
 	newElmnt->prev = top; /* top is null if stack is empty (null) */
 	newElmnt->next = NULL;
 	if (stackIsNull)
-		*stack = newElmnt; /* make stack point to newElmnt */
+		stack = newElmnt; /* make stack point to newElmnt */
 	else
 		top->next = newElmnt; /* set old top elmnt's next ptr to newElmnt */
 
@@ -51,14 +52,13 @@ int push(char *n, int lineNum, stack_t **stack)
  * pop - removes the element at the top of the stack
  *
  * @lineNum: line number this was called on in the Monty script
- * @stack: the stack to remove from
  * Return: 1 on success, or 0 if the stack is empty to indicate failure.
  */
-int pop(int lineNum, stack_t **stack)
+int pop(int lineNum)
 {
-	stack_t *top = getTopElement(*stack);
+	stack_t *top = getTopElement();
 
-	if (*stack == NULL)
+	if (stack == NULL)
 	{
 		fprintf(stderr, "L%d: can't pop an empty stack\n", lineNum + 1);
 		return (0); /* indicate failure */
@@ -71,21 +71,18 @@ int pop(int lineNum, stack_t **stack)
 		top = NULL; /* free(top); caused a segfault */
 	}
 	else
-		*stack = NULL;
+		stack = NULL;
 
 	return (1);
 }
 
 /**
- * pass - prints all values on the stack starting from the top.
+ * pall - prints all values on the stack starting from the top.
  * @lineNum: line number of current opcode
- * @stack: pointer to the stack
  */
-void pall(int lineNum, stack_t *stack)
+void pall()
 {
-	stack_t *i = getTopElement(stack);
-
-	(void) lineNum; /* might need later */
+	stack_t *i = getTopElement();
 
 	while (i != NULL)
 	{
@@ -96,14 +93,12 @@ void pall(int lineNum, stack_t *stack)
 
 /**
  * pint - prints the number at the top of the stack
- *
  * @lineNum: line number this was called on in the Monty script
- * @stack: the stack to print from
  * Return: 1 on success, or 0 if the stack is empty to indicate failure.
  */
-int pint(int lineNum, stack_t *stack)
+int pint(int lineNum)
 {
-	stack_t *top = getTopElement(stack);
+	stack_t *top = getTopElement();
 
 	if (stack == NULL)
 	{
@@ -121,7 +116,7 @@ int pint(int lineNum, stack_t *stack)
  * @stack: pointer to the stack
  * Return: last element in the stack, or null if stack is empty.
  */
-stack_t *getTopElement(stack_t *stack)
+stack_t *getTopElement()
 {
 	stack_t *tail = stack;
 

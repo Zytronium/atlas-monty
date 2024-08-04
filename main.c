@@ -1,5 +1,6 @@
 #include "monty.h"
-
+/* stack - the global stack */
+stack_t *stack = NULL;
 /**
  * main - entry point
  *
@@ -10,7 +11,6 @@
  */
 int main(int argc, char *argv[])
 {
-	stack_t *stack = NULL;
 	int exitRtn = EXIT_SUCCESS;
 	char *instructions = NULL, ***parsedInstructions = NULL;
 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 		exitRtn = EXIT_FAILURE;
 		goto end;
 	}
-	if (executeInstructions(parsedInstructions, stack) == 0)
+	if (executeInstructions(parsedInstructions) == 0)
 		exitRtn = EXIT_FAILURE;
 
 	end:
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	if (instructions != NULL)
 		free(instructions);
 
-	freeStack(stack);
+	freeStack();
 	return (exitRtn);
 }
 
@@ -140,13 +140,10 @@ int parseInstructions(char *instructions, char ***dest)
 
 /**
  * executeInstructions - execute the instructions provided
- *
  * @instructions: the string of instructions TODO: maybe make this the linked list/array of instructions instead.
- * @stack: the stack
- *
  * Return: 1 on success, 0 on failure
  */
-int executeInstructions(char ***instructions, stack_t *stack)
+int executeInstructions(char ***instructions)
 {
 	int lineNum = 0;
 	char *opcode;
@@ -156,22 +153,22 @@ int executeInstructions(char ***instructions, stack_t *stack)
 		opcode = instructions[lineNum][0];
 		if (opcodeIs("push"))
 		{
-			if (push(instructions[lineNum][1], lineNum, &stack) == 0)
+			if (push(instructions[lineNum][1], lineNum) == 0)
 				return (0); /* indicate failure */
 		}
 		else if (opcodeIs("pop"))
 		{
-			if (pop(lineNum, &stack) == 0)
+			if (pop(lineNum) == 0)
 				return (0); /* indicate failure */
 		}
 		else if (opcodeIs("pint"))
 		{
-			if (pint(lineNum, stack) == 0)
+			if (pint(lineNum) == 0)
 				return (0); /* indicate failure */
 		}
 		else if (opcodeIs("pall"))
 		{
-			pall(lineNum, stack);
+			pall();
 		}
 		else if (!opcodeIs("nop") && !opcodeIs(""))
 		{
@@ -228,9 +225,9 @@ char *getFileContents(const char *filename)
  * freeStack - frees the stack from memory
  * @stack the stack to free
  */
-void freeStack(stack_t *stack)
+void freeStack()
 {
-	stack_t *tempStackNode = getTopElement(stack);
+	stack_t *tempStackNode = getTopElement();
 
 	if (stack == NULL)
 		return;
@@ -244,5 +241,4 @@ void freeStack(stack_t *stack)
 		}
 		free(tempStackNode);
 	}
-	free(stack);
 }
