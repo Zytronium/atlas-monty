@@ -163,6 +163,11 @@ int executeInstructions(char ***instructions, stack_t *stack)
 		{
 			pall(lineNum, stack);
 		}
+		else if (opcodeIs("pint"))
+		{
+			if (pint(lineNum, stack) == 0)
+				return (0); /* indicate failure */
+		}
 		else if (!opcodeIs("nop") && !opcodeIs(""))
 		{
 			fprintf(stderr, "L%d: unknown instruction %s\n", lineNum + 1, opcode);
