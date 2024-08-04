@@ -163,7 +163,10 @@ stack_t *getTopElement()
  */
 int isNumber(char *number)
 {
-	unsigned int i;
+	unsigned int i = 0;
+
+	if (number == NULL)
+		return (0);
 
 	for (i = 0; i < strlen(number); i++)
 	{

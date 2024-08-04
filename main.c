@@ -84,6 +84,9 @@ int parseInstructions(char *instructions, char ***dest)
 {
 	int parsedLine = 0, parsedWord = 0, parsedLetter = 0, i = 0;
 
+	if (dest == NULL)
+		return (1); /* do nothing, but no error */
+
 	dest[0] = malloc(sizeof(char *) * MAX_WORD_CNT); /* word limit of 3 per line */
 	if (dest[0] == NULL)
 		return (0); /* indicate malloc failure */
@@ -100,24 +103,26 @@ int parseInstructions(char *instructions, char ***dest)
 	while (instructions[i])
 	{
 		if (instructions[i] != '\n' && instructions[i] != ' ' &&
-			instructions[i] != '\t')
+			instructions[i] != '\t') /* set letters if char is not whitespace */
 		{
 			dest[parsedLine][parsedWord][parsedLetter] = instructions[i];
 			parsedLetter++;
 		}
 		else if ((instructions[i] == ' ' || instructions[i] == '\t') &&
-				(i > 0 && (instructions[i - 1] != ' ' && instructions[i - 1] != '\t')))
+				(i == 0 || (instructions[i - 1] != ' ' &&
+				instructions[i - 1] != '\t' &&
+				instructions[i - 1] != '\n'))) /* increment to next word */
 		{
-			/* TODO: probably need to add a null byte */
+			dest[parsedLine][parsedWord][parsedLetter] = '\0';
 			parsedWord++;
 			parsedLetter = 0;
 			dest[parsedLine][parsedWord] = malloc(sizeof(char) * MAX_LETTER_CNT);
 			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
 		}
-		else if (i > 0 && (instructions[i - 1] != ' ' && instructions[i - 1] != '\t'))
+		else if (instructions[i] == '\n') /* increment to next line */
 		{
-			/* TODO: may need to add a null byte */
+			dest[parsedLine][parsedWord][parsedLetter] = '\0';
 			parsedLine++;
 			parsedLetter = 0;
 			parsedWord = 0;
@@ -151,6 +156,12 @@ int executeInstructions(char ***instructions)
 	while (instructions[lineNum])
 	{
 		opcode = instructions[lineNum][0];
+		if (opcode == NULL)
+		{
+			lineNum++;
+			continue;
+		}
+
 		if (opcodeIs("push"))
 		{
 			if (push(instructions[lineNum][1], lineNum) == 0)
