@@ -1,14 +1,15 @@
 # C - Stacks, Queues - LIFO, FIFO
-insert joke here
-###### Insert 2-part joke answer here
+`printf("%d\n", atoi("stack"));`
+###### output: `64`
 
 ---
-###### Description of this project and the concepts covered in it.
 
-This is a template placeholder ReadMe. I will fill it out when I know
-enough about the project to do so. 
+This project is sort of a compiler for a Monty 0.98 script. It reads and
+parses a file, executes its instructions, and handles errors in the script.
+Mainly, it works with a stack, which contains every number the script pushes
+onto it. *Some* of these instructions are: push, pop, swap, add, sub, and pall. 
 
-Notes on this concept:
+###### Notes on this concept:
 
 ### LIFO - Last in First out
 like a stack of plates. The last element to get added is the first to get removed. Elements get added to the top, and get removed from the top.
@@ -24,23 +25,3 @@ Like a stack of plates where you can push (add) and pop (remove) elements from o
 Like a queue of people waiting their turn where you can enqueue (add) to the end and dequeue (remove) from the front.
 
 ---
-
-Examples of this concept.
-
-```c
-float primary(NULL)
-{
-	writef("Goodbye, user. I must terminate now."
-		   "It's been a fun 3 milliseconds!\n");
-	exit(RETURN_SUCCESS);
-}
-
-```
-Example output:
-```
-margorP\.
-Goodbye, user. I must terminate now. It's been a
- fun 3 milliseconds!
-
-Program finished with exit code 0.
-```
