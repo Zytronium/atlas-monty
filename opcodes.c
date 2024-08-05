@@ -168,10 +168,14 @@ int isNumber(char *number)
 	if (number == NULL)
 		return (0);
 
-	for (i = 0; i < strlen(number); i++)
+	if (number[0] == '-')
+		i++; /* do not return 0 if number is negative */
+
+	while (i < strlen(number))
 	{
 		if (number[i] > '9' || number[i] < '0')
 			return (0);
+		i++;
 	}
 
 	return (1);
