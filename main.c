@@ -206,8 +206,9 @@ int executeInstructions(char ***instructions)
 char *getFileContents(const char *filename)
 {
 	int fileDesc;
-	ssize_t charsRead;
-	char *instructions = malloc(MAX_FILE_SIZE);
+	ssize_t charsRead, totalCharsRead = 0;
+	int bufferSize = 1024;
+	char *instructions = malloc(sizeof(char) * bufferSize), tempBuffer[256];
 
 	if (instructions == NULL)
 	{
@@ -218,7 +219,7 @@ char *getFileContents(const char *filename)
 	if (filename == NULL)
 	{
 		fprintf(stderr, "Error: unknown error\n");
-		return (NULL);
+		return NULL;
 	}
 
 	fileDesc = open(filename, O_RDONLY);
@@ -229,9 +230,26 @@ char *getFileContents(const char *filename)
 		return (NULL);
 	}
 
-	charsRead = read(fileDesc, instructions,  MAX_FILE_SIZE - 1); /* file size limit */
+	while ((charsRead = read(fileDesc, tempBuffer, sizeof(tempBuffer) - 1)) > 0)
+	{
+		if (totalCharsRead + charsRead >= bufferSize)
+		{ /* if its not done reading */
+			char *newInstructions = malloc(bufferSize *= 2); /* doubles the buffer size */
+			if (newInstructions == NULL)
+			{
+				fprintf(stderr, "Error: malloc failed\n");
+				close(fileDesc);
+				return (NULL);
+			}
+			memcpy(newInstructions, instructions, totalCharsRead); /* copies the characters read into the new variable */
+			free(instructions); /* not needed anymore; we just copied it to newInstructicns */
+			instructions = newInstructions; /* update instructions to point to the new buffer */
+		}
+		memcpy(&instructions[totalCharsRead], tempBuffer, charsRead); /* appends tempBuffer to the instructions string */
+		totalCharsRead += charsRead;
+	}
 
-	instructions[charsRead + 1] = '\0';
+	instructions[totalCharsRead] = '\0';
 	close(fileDesc);
 
 	return (instructions);
