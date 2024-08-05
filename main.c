@@ -56,17 +56,7 @@ int main(int argc, char *argv[])
 	freeStack();
 	return (exitRtn);
 }
-/*
- * note:
- * argv[0]: program name
- * argv[1]: file to process
- */
 
-/**
- * freeParsedInstr - frees the parsed instructions from memory
- *
- * @parsedInstructions: parsed instructions to free
- */
 void freeParsedInstr(char ***parsedInstructions)
 {
 	int i = 0, j = 0;
@@ -90,28 +80,20 @@ void freeParsedInstr(char ***parsedInstructions)
 	free(parsedInstructions);
 }
 
-/**
- * parseInstructions - parses file contents string into an
- * array of arrays of strings
- * @instructions: File contents
- * @dest: parsedInstructions variable; array of arrays of strings
- * Return: 1 on success; or 0 on malloc failure.
- */
 int parseInstructions(char *instructions, char ***dest)
 {
-	long int parsedLine = 0, parsedWord = 0, parsedLetter = 0, i = 0;
-	long int bufferSizeLines = 8, bufferSizeWords = 2, bufferSizeLetters = 4;
+	int parsedLine = 0, parsedWord = 0, parsedLetter = 0, i = 0;
 
-	dest = malloc(sizeof(char **) * bufferSizeLines);
 	if (dest == NULL)
-		return (0); /* indicate malloc failure */
+		return (1); /* do nothing, but no error */
 
-	dest[0] = malloc(sizeof(char *) * bufferSizeWords); /* 1st line */
+	dest[0] = malloc(sizeof(char *) * MAX_WORD_CNT); /* word limit of 3 per line */
 	if (dest[0] == NULL)
 		return (0); /* indicate malloc failure */
-	dest[0][0] = malloc(sizeof(char) * bufferSizeLetters);/*1st word*/
+	dest[0][0] = malloc(sizeof(char) * MAX_LETTER_CNT); /* char limit of 16 per word (leaving space for long numbers) */
 	if (dest[0][0] == NULL)
 		return (0); /* indicate malloc failure */
+
 	/*
 	 * I parsed	it this way instead of with strtok because I'm not too familiar
 	 * with strtok, and I've done something similar on a personal project in
@@ -123,43 +105,19 @@ int parseInstructions(char *instructions, char ***dest)
 		if (instructions[i] != '\n' && instructions[i] != ' ' &&
 			instructions[i] != '\t') /* set letters if char is not whitespace */
 		{
-			if (parsedLetter >= bufferSizeLetters - 1)
-			{
-				char *newWord = malloc(sizeof(char) * (bufferSizeLetters *= 2)); /* doubles the buffer size */
-				if (newWord == NULL) 					/* malloc fail check */
-				{
-					free(dest[parsedLine][parsedWord]);
-					return (0); /* indicate malloc failure */
-				}
-				memcpy(newWord, dest[parsedLine][parsedWord], parsedLetter); /* copies the word into the new variable */
-				free(dest[parsedLine][parsedWord]); /* not needed anymore; we just copied it to the new variable */
-				dest[parsedLine][parsedWord] = newWord; /* update it to point to the new buffer */
-			}
-			dest[parsedLine][parsedWord][parsedLetter++] = instructions[i];
+			dest[parsedLine][parsedWord][parsedLetter] = instructions[i];
+			parsedLetter++;
 		}
 		else if ((instructions[i] == ' ' || instructions[i] == '\t') &&
-				 (i == 0 || (instructions[i - 1] != ' ' &&
-							 instructions[i - 1] != '\t' &&
-							 instructions[i - 1] != '\n')))
-		{ /* increment to next word */
+				(i == 0 || (instructions[i - 1] != ' ' &&
+				instructions[i - 1] != '\t' &&
+				instructions[i - 1] != '\n'))) /* increment to next word */
+		{
 			dest[parsedLine][parsedWord][parsedLetter] = '\0';
 			parsedWord++;
 			parsedLetter = 0;
-			if (parsedWord >= bufferSizeWords)
-			{
-				char **newLine = malloc(sizeof(char *) * (bufferSizeWords *= 2)); /* doubles the buffer size */
-				if (newLine == NULL) 					/* malloc fail check */
-				{
-					free(dest[parsedLine][parsedWord]);
-					free(dest[parsedLine]);
-					return (0); /* indicate malloc failure */
-				}
-				memcpy(newLine, dest[parsedLine], sizeof(char *) * parsedWord); /* copies the line into the new variable */
-				free(dest[parsedLine]); /* not needed anymore; we just copied it to the new variable */
-				dest[parsedLine] = newLine; /* update it to point to the new buffer */
-			}
-			dest[parsedLine][parsedWord] = malloc(sizeof(char) * bufferSizeLetters);
-			if (dest[parsedLine][parsedWord] == NULL) 	/* malloc fail check */
+			dest[parsedLine][parsedWord] = malloc(sizeof(char) * MAX_LETTER_CNT);
+			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
 		}
 		else if (instructions[i] == '\n') /* increment to next line */
@@ -168,31 +126,22 @@ int parseInstructions(char *instructions, char ***dest)
 			parsedLine++;
 			parsedLetter = 0;
 			parsedWord = 0;
-			if (parsedLine >= bufferSizeLines)
-			{
-				char ***newDest = malloc(sizeof(char **) * (bufferSizeLines *= 2)); /* doubles the buffer size */
-				if (newDest == NULL) 					/* malloc fail check */
-				{
-					free(dest[parsedLine][parsedWord]);
-					free(dest[parsedLine]);
-					free(dest);
-					return (0); /* indicate malloc failure */
-				}
-				memcpy(newDest, dest, sizeof(char **) * parsedLine); /* copies dest into the new variable */
-				free(dest); /* not needed anymore; we just copied it to the new variable */
-				dest = newDest; /* update dest to point to the new buffer */
-			}
-			dest[parsedLine] = malloc(sizeof(char *) * bufferSizeWords);
-			if (dest[parsedLine] == NULL) 				/* malloc fail check */
+			dest[parsedLine] = malloc(sizeof(char *) * MAX_WORD_CNT);
+			if (dest[parsedLine] == NULL)
 				return (0); /* indicate malloc failure */
-			dest[parsedLine][parsedWord] = malloc(sizeof(char) * bufferSizeLetters);
-			if (dest[parsedLine][parsedWord] == NULL) 	/* malloc fail check */
+			dest[parsedLine][parsedWord] = malloc(sizeof(char) * MAX_LETTER_CNT);
+			if (dest[parsedLine][parsedWord] == NULL)
 				return (0); /* indicate malloc failure */
 		}
 		i++;
 	}
 	return (1);
 }
+/*
+ * note:
+ * argv[0]: program name
+ * argv[1]: file to process
+ */
 
 /**
  * executeInstructions - execute the instructions provided
@@ -284,7 +233,7 @@ char *getFileContents(const char *filename)
 	while ((charsRead = read(fileDesc, tempBuffer, sizeof(tempBuffer) - 1)) > 0)
 	{
 		if (totalCharsRead + charsRead >= bufferSize)
-		{ /* if it's not done reading */
+		{ /* if its not done reading */
 			char *newInstructions = malloc(bufferSize *= 2); /* doubles the buffer size */
 			if (newInstructions == NULL)
 			{
