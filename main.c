@@ -248,10 +248,14 @@ char *getFileContents(const char *filename)
 		memcpy(&instructions[totalCharsRead], tempBuffer, charsRead); /* appends tempBuffer to the instructions string */
 		totalCharsRead += charsRead;
 	}
-
+	if (charsRead < 0) /* error reading file */
+	{
+		fprintf(stderr, "Error: Can't read file %s\n", filename);
+		close(fileDesc);
+		return (NULL);
+	}
 	instructions[totalCharsRead] = '\0';
 	close(fileDesc);
-
 	return (instructions);
 }
 
