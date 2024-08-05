@@ -52,6 +52,7 @@ int push(char *n, int lineNum)
  * pop - removes the element at the top of the stack
  *
  * @lineNum: line number this was called on in the Monty script
+ *
  * Return: 1 on success, or 0 if the stack is empty to indicate failure.
  */
 int pop(int lineNum)
@@ -77,7 +78,6 @@ int pop(int lineNum)
 
 /**
  * pall - prints all values on the stack starting from the top.
- * @lineNum: line number of current opcode
  */
 void pall()
 {
@@ -135,7 +135,6 @@ int swap(int lineNum)
 
 /**
  * getTopElement - gets the element at the top of the stack
- * @stack: pointer to the stack
  * Return: last element in the stack, or null if stack is empty.
  */
 stack_t *getTopElement()

@@ -56,7 +56,17 @@ int main(int argc, char *argv[])
 	freeStack();
 	return (exitRtn);
 }
+/*
+ * note:
+ * argv[0]: program name
+ * argv[1]: file to process
+ */
 
+/**
+ * freeParsedInstr - frees the parsed instructions from memory
+ *
+ * @parsedInstructions: parsed instructions to free
+ */
 void freeParsedInstr(char ***parsedInstructions)
 {
 	int i = 0, j = 0;
@@ -80,6 +90,13 @@ void freeParsedInstr(char ***parsedInstructions)
 	free(parsedInstructions);
 }
 
+/**
+ * parseInstructions - parses file contents string into an
+ * array of arrays of strings
+ * @instructions: File contents
+ * @dest: parsedInstructions variable; array of arrays of strings
+ * Return: 1 on success; or 0 on malloc failure.
+ */
 int parseInstructions(char *instructions, char ***dest)
 {
 	int parsedLine = 0, parsedWord = 0, parsedLetter = 0, i = 0;
@@ -137,11 +154,6 @@ int parseInstructions(char *instructions, char ***dest)
 	}
 	return (1);
 }
-/*
- * note:
- * argv[0]: program name
- * argv[1]: file to process
- */
 
 /**
  * executeInstructions - execute the instructions provided
@@ -233,7 +245,7 @@ char *getFileContents(const char *filename)
 	while ((charsRead = read(fileDesc, tempBuffer, sizeof(tempBuffer) - 1)) > 0)
 	{
 		if (totalCharsRead + charsRead >= bufferSize)
-		{ /* if its not done reading */
+		{ /* if it's not done reading */
 			char *newInstructions = malloc(bufferSize *= 2); /* doubles the buffer size */
 			if (newInstructions == NULL)
 			{

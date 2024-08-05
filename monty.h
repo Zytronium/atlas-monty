@@ -24,22 +24,22 @@
 
 #ifndef MAX_LETTER_CNT
 #define MAX_LETTER_CNT 16
-
+/* max number of letters per word */
 #endif /* MAX_LETTER_CNT */
 
 #ifndef MAX_WORD_CNT
 #define MAX_WORD_CNT 8
-
+/* max number of words per line */
 #endif /* MAX_WORD_CNT */
 
 #ifndef MAX_LINE_CNT
 #define MAX_LINE_CNT 3072
-
+/* max number of lines per file */
 #endif /* MAX_LINE_CNT */
 
 #ifndef MAX_FILE_SIZE
 #define MAX_FILE_SIZE 393216 /*MAX_LINE_CNT * MAX_WORD_CNT * MAX_LETTER_CNT*/
-
+/* max size in memory for a file */
 #endif /* MAX_FILE_SIZE */
 
 /**
