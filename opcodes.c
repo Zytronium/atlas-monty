@@ -117,7 +117,7 @@ int pint(int lineNum)
  */
 int swap(int lineNum)
 {
-	int swapN;
+	int secondTopN;
 	stack_t *top = getTopElement();
 
 	if (top == stack) /* if stack is null or stack is only 1 element */
@@ -126,9 +126,52 @@ int swap(int lineNum)
 		return (0);
 	}
 
-	swapN = top->n;
+	secondTopN = top->n;
 	top->n = top->prev->n;
-	top->prev->n = swapN;
+	top->prev->n = secondTopN;
+
+	return (1);
+}
+
+/**
+ * add - adds the top 2 elements on the stack
+ * @lineNum: Current line number
+ * Return: 1 on success; or 0 on failure.
+ */
+int add(int lineNum)
+{
+	stack_t *top = getTopElement();
+
+	if (top == stack) /* if stack is null or stack is only 1 element */
+	{
+		fprintf(stderr, "L%d: can't add, stack too short\n", lineNum + 1);
+		return (0); /* indicate failure */
+	}
+
+	top->prev->n += top->n;
+	top->prev->next = NULL;
+	free(top);
+
+	return (1);
+}
+/**
+ * sub - subtracts the top 2 elements on the stack
+ * @lineNum: Current line number
+ * Return: 1 on success; or 0 on failure.
+ */
+int sub(int lineNum)
+{
+	stack_t *top = getTopElement();
+
+	if (top == stack) /* if stack is null or stack is only 1 element */
+	{
+		fprintf(stderr, "L%d: can't sub, stack too short\n", lineNum + 1);
+		return (0); /* indicate failure */
+	}
+
+	top->prev->n -= top->n;
+	top->prev->next = NULL;
+	free(top);
 
 	return (1);
 }

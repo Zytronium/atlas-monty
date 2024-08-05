@@ -189,6 +189,16 @@ int executeInstructions(char ***instructions)
 			if (swap(lineNum) == 0)
 				return (0); /* indicate failure */
 		}
+		else if (opcodeIs("add"))
+		{
+			if (add(lineNum) == 0)
+				return (0); /* indicate failure */
+		}
+		else if (opcodeIs("sub"))
+		{
+			if (sub(lineNum) == 0)
+				return (0); /* indicate failure */
+		}
 		else if (opcodeIs("pint"))
 		{
 			if (pint(lineNum) == 0)

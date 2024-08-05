@@ -84,6 +84,8 @@ void freeStack();
 int push(char *n, int lineNum);
 int pop(int lineNum);
 int swap(int lineNum);
+int add(int lineNum);
+int sub(int lineNum);
 void pall();
 int pint(int lineNum);
 /* ------------------- */
